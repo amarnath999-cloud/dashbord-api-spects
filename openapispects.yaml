@@ -1,0 +1,320 @@
+openapi: 3.0.3 
+info:
+  title: Workflow Managemant Specification
+  version: 1.0.0
+  description: Workflow Managemant API specification
+
+servers:
+  - url: '{protocol}://{ip}:{port}/{base-api}'
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+      ip:
+        enum:
+          - localhost
+          - 34.199.12.114
+        default: localhost
+      port:
+        enum:
+          - '9000'
+          - '5057'
+        default: '9000'
+      base-api:
+        enum:
+          - api
+        default: api
+tags: 
+  - name: project
+    description: perform CRUD operations on Project Table
+  - name: UseCase
+    description: perform CRUD operations on Usecase Table  
+  - name: Resource
+    description: perform CRUD operations on Resources Table
+  
+paths:
+  /project/{id}/totalprojects:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          format: int64
+        required: true
+    get:
+      tags: 
+        - project
+      summary: Get total projects
+      operationId: getTotalProject
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectDTO'
+        '404':
+          description: "Service Not found"
+        '500':
+          description: "Internal Server Error"
+  /project/{id}/completedprojects:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          format: int64
+        required: true
+    get:
+      tags: 
+        - project
+      summary: Get completed projects
+      operationId: getCompletedProjects
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectDTO'
+        '404':
+          description: "Service Not found"
+        '500':
+          description: "Internal Server Error"
+  /project/{id}/inprogressprojects:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          format: int64
+        required: true
+    get:
+      tags: 
+        - project
+      summary: Get inprogress projects
+      operationId: getInprogressProjects
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectDTO'
+        '404':
+          description: "Service Not found"
+        '500':
+          description: "Internal Server Error"
+  /project/{id}/unassignprojects:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          format: int64
+        required: true
+    get:
+      tags: 
+        - project
+      summary: Get unassaign projects
+      operationId: getUnassignProjects
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectDTO'
+        '404':
+          description: "Service Not found"
+        '500':
+          description: "Internal Server Error"
+          
+  /usecase/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          format: int64
+        required: true
+    get:
+      tags:
+        - UseCase
+      summary: Fetch a Usecase of given id
+      operationId: getUsecase
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsecaseDTO'
+        '404':
+          description: "Service Not found"
+        '500':
+          description: "Internal Server Error"
+        
+   
+  /resource/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          format: int64
+        required: true
+    get:
+      tags:
+        - Resource
+      summary: Fetch list of Resources
+      operationId: getResources
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResourcesDTO'
+        '404':
+          description: Service Not found
+        '500':
+          description: Internal Server Error
+      
+    post:
+      tags:
+        - Resource
+      summary: Add resources
+      operationId: addResources
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourcesDTO'
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourcesDTO'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourcesDTO'
+        '404':
+          description: "Service Not found"
+        '500':
+          description: "Internal Server Error"    
+          
+    
+    
+
+
+
+components:
+  schemas:
+    ProjectDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        department:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        budget:
+          type: string
+        createdBy:
+          type: string
+        updatedBy:
+          type: string
+        createdOn:
+          type: string
+        updatedOn:
+          type: string
+        status:
+          type: string
+          
+    UsecaseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        createdBy:
+          type: string
+        updatedBy:
+          type: string
+        createdOn:
+          type: string
+        updatedOn:
+          type: string
+        status:
+          type: string
+        resourceId:
+           type: integer
+           format: int64
+        projectId:
+           type: integer
+           format: int64
+      
+    
+          
+    ResourcesDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        resourceName:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+        createdBy:
+          type: string
+        updatedBy:
+          type: string
+        createdOn:
+          type: string
+        updatedOn:
+          type: string
+        status:
+          type: string  
+    
+          
+    
+      
+          
+
+        
+        
+        
